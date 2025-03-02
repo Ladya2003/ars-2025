@@ -26,7 +26,7 @@ function RewardsDrawer({ gameState, open, onClose }) {
       content: (
         <Box
           component="img"
-          src="/assets/watch-reward.jpg"
+          src="/assets/rewards/watch-reward.jpg"
           sx={{
             width: '100%',
             borderRadius: 1,
@@ -43,8 +43,8 @@ function RewardsDrawer({ gameState, open, onClose }) {
       content: (
         <audio
           controls
-          src="/assets/reward-song.mp3"
-          style={{ width: '100%', marginTop: '16px' }}
+          src="/assets/rewards/reward-song.mp3"
+          style={{ width: '100%', marginTop: '16px', minWidth: '300px' }}
         />
       ),
       unlocked: gameState.level2Completed
@@ -57,7 +57,7 @@ function RewardsDrawer({ gameState, open, onClose }) {
           component="video"
           controls
           sx={{ width: '100%', borderRadius: 1, mt: 2 }}
-          src="/assets/final-reward.mp4"
+          src="/assets/rewards/final-reward.mp4"
         />
       ),
       unlocked: gameState.level3Completed
