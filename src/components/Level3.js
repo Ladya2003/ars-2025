@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import useSound from 'use-sound';
+import Confetti from 'react-confetti';
 
 const PADDLE_HEIGHT = 10;
 const PADDLE_WIDTH = 75;
@@ -20,6 +21,11 @@ const BRICK_WIDTH = 60;
 const BRICK_GAP = 4;
 const BRICK_ROWS = 3;
 const BRICK_COLS = 5;
+const MIN_SCORE = 10;
+
+// Уменьшите значения dx и dy для уменьшения скорости
+const INITIAL_BALL_DX = 1; // Уменьшенная скорость по оси X
+const INITIAL_BALL_DY = -1; // Уменьшенная скорость по оси Y
 
 function Level3({ isActive, onComplete }) {
   const canvasRef = useRef(null);
@@ -27,11 +33,14 @@ function Level3({ isActive, onComplete }) {
   const [score, setScore] = useState(0);
   const [showDialog, setShowDialog] = useState(false);
   const [showReward, setShowReward] = useState(false);
-  const [playHitSound] = useSound('/assets/hit.mp3', { volume: 0.5 });
+  const [playHitSound] = useSound('/assets/level3/hit.mp3', { volume: 0.5 });
+  const [playHitPaddleSound] = useSound('/assets/level3/hit-paddle.mp3', { volume: 0.5 });
+
+  const isCompleted = score >= MIN_SCORE;
 
   const gameStateRef = useRef({
     paddle: { x: 0, width: PADDLE_WIDTH, height: PADDLE_HEIGHT },
-    ball: { x: 0, y: 0, dx: 4, dy: -4, size: BALL_SIZE },
+    ball: { x: 0, y: 0, dx: INITIAL_BALL_DX, dy: INITIAL_BALL_DY, size: BALL_SIZE },
     bricks: [],
     animationFrame: null
   });
@@ -41,28 +50,27 @@ function Level3({ isActive, onComplete }) {
     
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const game = gameStateRef.current;
     
     // Initialize paddle position
-    game.paddle.x = canvas.width / 2 - PADDLE_WIDTH / 2;
-    
-    // Initialize ball position
-    game.ball.x = canvas.width / 2;
-    game.ball.y = canvas.height - PADDLE_HEIGHT - BALL_SIZE - 10;
+    resetPaddlePosition(); // Сброс позиции ракетки
+    resetBallPosition(); // Сброс позиции мяча
     
     // Initialize bricks
     initializeBricks();
     
-    // Handle mouse movement
-    const handleMouseMove = (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      game.paddle.x = Math.max(0, Math.min(canvas.width - PADDLE_WIDTH, x));
-    };
-    
-    canvas.addEventListener('mousemove', handleMouseMove);
-    return () => canvas.removeEventListener('mousemove', handleMouseMove);
+    draw(); // Initial draw
   }, [isActive]);
+
+  const resetPaddlePosition = () => {
+    const canvas = canvasRef.current;
+    gameStateRef.current.paddle.x = canvas.width / 2 - PADDLE_WIDTH / 2; // Центрирование ракетки
+  };
+
+  const resetBallPosition = () => {
+    const canvas = canvasRef.current;
+    gameStateRef.current.ball.x = canvas.width / 2;
+    gameStateRef.current.ball.y = canvas.height - PADDLE_HEIGHT - BALL_SIZE - 10;
+  };
 
   const initializeBricks = () => {
     const game = gameStateRef.current;
@@ -111,7 +119,7 @@ function Level3({ isActive, onComplete }) {
     // Draw score
     ctx.fillStyle = '#fff';
     ctx.font = '16px Arial';
-    ctx.fillText(`Счёт: ${score}`, 8, 20);
+    // ctx.fillText(`Счёт: ${score}`, 8, 20);
   };
 
   const update = () => {
@@ -134,12 +142,10 @@ function Level3({ isActive, onComplete }) {
     if (game.ball.y + game.ball.size/2 > canvas.height - PADDLE_HEIGHT) {
       if (game.ball.x > game.paddle.x && game.ball.x < game.paddle.x + PADDLE_WIDTH) {
         game.ball.dy = -game.ball.dy;
-        playHitSound();
+        playHitPaddleSound();
       } else {
         // Game over
-        if (score >= 10) {
-          setShowDialog(true);
-        }
+        setShowDialog(true);
         setGameStarted(false);
         return;
       }
@@ -150,12 +156,9 @@ function Level3({ isActive, onComplete }) {
       if (!brick.broken && isColliding(game.ball, brick)) {
         brick.broken = true;
         game.ball.dy = -game.ball.dy;
-        setScore(s => s + 1);
+        console.log(score);
+        setScore(s => s + 1); // Обновление счета в реальном времени
         playHitSound();
-        
-        if (score + 1 >= 10) {
-          setShowDialog(true);
-        }
       }
     });
     
@@ -173,8 +176,11 @@ function Level3({ isActive, onComplete }) {
   const startGame = () => {
     if (!gameStarted) {
       setGameStarted(true);
-      setScore(0);
+      setShowDialog(false);
+      setScore(0); // Сброс счета
       initializeBricks();
+      resetBallPosition(); // Сброс позиции мяча при начале игры
+      resetPaddlePosition(); // Сброс позиции ракетки при начале игры
       gameStateRef.current.animationFrame = requestAnimationFrame(update);
     }
   };
@@ -188,6 +194,17 @@ function Level3({ isActive, onComplete }) {
     setShowDialog(false);
     setShowReward(true);
     setTimeout(() => onComplete(), 3000);
+  };
+
+  const movePaddle = (direction) => {
+    const canvas = canvasRef.current;
+    const game = gameStateRef.current;
+    if (direction === 'left') {
+      game.paddle.x = Math.max(0, game.paddle.x - 20);
+    } else if (direction === 'right') {
+      game.paddle.x = Math.min(canvas.width - PADDLE_WIDTH, game.paddle.x + 20);
+    }
+    draw(); // Redraw after moving
   };
 
   if (!isActive) return null;
@@ -214,22 +231,23 @@ function Level3({ isActive, onComplete }) {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
+            <Confetti
+                width={window.innerWidth}
+                height={window.innerHeight}
+                recycle={false}
+                numberOfPieces={200}
+              />
             <Typography variant="h5" gutterBottom>
-              Твоя финальная награда:
+              Твоя финальная награда - это видео, которое ты можешь посмотреть во вкладке "Награды"
             </Typography>
-            <Box
-              component="video"
-              controls
-              sx={{ width: '100%', borderRadius: 1, mt: 2 }}
-              src="/assets/final-reward.mp4"
-            />
           </motion.div>
         ) : (
           <>
             <Typography variant="h6" gutterBottom>
-              Уровень 3: Brick Breaker
+              Уровень 3: Леша Пидарас
             </Typography>
-            <Box sx={{ mt: 2, mb: 2 }}>
+            <Typography variant="h6" gutterBottom>Счёт: {score}</Typography>
+            <Box sx={{ mt: 2, mb: 2, display: 'flex', justifyContent: 'center' }}>
               <canvas
                 ref={canvasRef}
                 width={400}
@@ -250,15 +268,31 @@ function Level3({ isActive, onComplete }) {
                 Начать игру
               </Button>
             )}
+            {gameStarted && !showDialog && (
+              <Box sx={{ mt: 2 }}>
+                <Button variant="contained" onClick={() => movePaddle('left')} sx={{ mr: 1 }}>
+                  Влево
+                </Button>
+                <Button variant="contained" onClick={() => movePaddle('right')}>
+                  Вправо
+                </Button>
+              </Box>
+            )}
+            {showDialog && (
+              <Button variant="contained" onClick={startGame} sx={{ mt: 2 }}>
+                Начать заново
+              </Button>
+            )}
           </>
         )}
       </Paper>
 
-      <Dialog open={showDialog} onClose={() => setShowDialog(false)}>
-        <DialogTitle>Поздравляем!</DialogTitle>
+      <Dialog open={showDialog && isCompleted} onClose={() => setShowDialog(false)}>
+        <DialogTitle>{isCompleted ? 'Поздравляем!' : 'Попытайтесь ещё раз!'}</DialogTitle>
         <DialogContent>
           <Typography>
-            Ты набрал {score} очков! Хочешь продолжить игру или получить награду?
+            Ты набрал {score} очков! 
+            {isCompleted ? 'Хочешь продолжить игру или получить награду?' : 'Попытайтесь ещё раз! Надо получить минимум 10 очков'}
           </Typography>
         </DialogContent>
         <DialogActions>

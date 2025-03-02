@@ -13,6 +13,7 @@ import {
 import { PlayArrow, Pause } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { questions } from '../data/questions';
+import Confetti from 'react-confetti';
 
 function Level2({ isActive, onComplete }) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -86,10 +87,15 @@ function Level2({ isActive, onComplete }) {
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.5 }}
             >
+              <Confetti
+                width={window.innerWidth}
+                height={window.innerHeight}
+                recycle={false}
+                numberOfPieces={200}
+              />
               <Typography variant="h5" gutterBottom>
-                Вот твоя особенная песня:
+                Поздравляем! Твоя награда - особенная песня, которую ты можешь посмотреть во вкладке "Награды"
               </Typography>
-              <audio controls src="/assets/reward-song.mp3" style={{ width: '100%', marginTop: '20px' }} />
             </motion.div>
           ) : (
             <motion.div

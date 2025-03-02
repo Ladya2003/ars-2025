@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Container, Box, Fab } from '@mui/material';
+import { Container, Box, Fab, Typography } from '@mui/material';
 import InitialQuestion from './components/InitialQuestion';
 import Level1 from './components/Level1';
 import Level2 from './components/Level2';
@@ -26,13 +26,22 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  const [gameState, setGameState] = useState({
-    isInitialCompleted: false,
-    level1Completed: false,
-    level2Completed: false,
-    level3Completed: false,
-    drawerOpen: false,
+  const [gameState, setGameState] = useState(() => {
+    // Восстановление состояния из localStorage
+    const savedState = localStorage.getItem('gameState');
+    return savedState ? JSON.parse(savedState) : {
+      isInitialCompleted: false,
+      level1Completed: false,
+      level2Completed: false,
+      level3Completed: false,
+      drawerOpen: false,
+    };
   });
+
+  useEffect(() => {
+    // Сохранение состояния в localStorage при изменении gameState
+    localStorage.setItem('gameState', JSON.stringify(gameState));
+  }, [gameState]);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -71,6 +80,22 @@ function App() {
                   isActive={!gameState.level3Completed}
                   onComplete={() => setGameState(prev => ({...prev, level3Completed: true}))}
                 />
+              )}
+              {gameState.level3Completed && (
+                <Box 
+                  sx={{ 
+                    position: 'fixed', 
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)', 
+                    zIndex: 1000, 
+                    textAlign: 'center' 
+                  }}
+              >
+                <Typography variant="h4" color="primary">
+                  МЭНЧИК ТЫ КРАСАВА!!!<br /><br />ТЫ ВСЕ ПРОШЕЛ!!!
+                </Typography>
+              </Box>
               )}
             </>
           )}

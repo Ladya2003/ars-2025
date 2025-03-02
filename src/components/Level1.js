@@ -81,7 +81,7 @@ function Level1({ isActive, onComplete }) {
               </Typography>
               <Box
                 component="img"
-                src="/assets/watch-reward.jpg"
+                src="/assets/rewards/watch-reward.jpg"
                 sx={{
                   maxWidth: '100%',
                   height: 'auto',
