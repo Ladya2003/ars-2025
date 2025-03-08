@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/ars-gift/static/css/main.e6c13ad2.css",
+    "main.js": "/ars-gift/static/js/main.c6658dc8.js",
+    "static/js/885.229ebffb.chunk.js": "/ars-gift/static/js/885.229ebffb.chunk.js",
+    "static/js/453.bcaf3246.chunk.js": "/ars-gift/static/js/453.bcaf3246.chunk.js",
+    "index.html": "/ars-gift/index.html",
+    "main.e6c13ad2.css.map": "/ars-gift/static/css/main.e6c13ad2.css.map",
+    "main.c6658dc8.js.map": "/ars-gift/static/js/main.c6658dc8.js.map",
+    "885.229ebffb.chunk.js.map": "/ars-gift/static/js/885.229ebffb.chunk.js.map",
+    "453.bcaf3246.chunk.js.map": "/ars-gift/static/js/453.bcaf3246.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.c6658dc8.js"
+  ]
+}
