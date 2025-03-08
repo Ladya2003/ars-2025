@@ -246,6 +246,7 @@ function Level3({ isActive, onComplete }) {
             <Typography variant="h6" gutterBottom>
               Уровень 3: Леша Пидарас
             </Typography>
+            <Typography variant="p" gutterBottom>Твоя задача - разбить минимум 10 кирпичей (как те, что мы дарили Жене на ДР)</Typography>
             <Typography variant="h6" gutterBottom>Счёт: {score}</Typography>
             <Box sx={{ mt: 2, mb: 2, display: 'flex', justifyContent: 'center' }}>
               <canvas
@@ -291,12 +292,12 @@ function Level3({ isActive, onComplete }) {
         <DialogTitle>{isCompleted ? 'Поздравляем!' : 'Попытайтесь ещё раз!'}</DialogTitle>
         <DialogContent>
           <Typography>
-            Ты набрал {score} очков! 
-            {isCompleted ? 'Хочешь продолжить игру или получить награду?' : 'Попытайтесь ещё раз! Надо получить минимум 10 очков'}
+            Ты набрал {score} очков! &nbsp;
+            {isCompleted ? 'Хочешь начать игру заново или получить награду?' : 'Попытайтесь ещё раз! Надо получить минимум 10 очков'}
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleContinuePlaying}>Продолжить игру</Button>
+          <Button onClick={handleContinuePlaying}>Начать игру заново</Button>
           <Button onClick={handleShowReward} variant="contained">
             Получить награду
           </Button>

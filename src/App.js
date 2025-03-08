@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Container, Box, Fab, Typography } from '@mui/material';
+import { Container, Box, Fab, Typography, Button } from '@mui/material';
 import InitialQuestion from './components/InitialQuestion';
 import Level1 from './components/Level1';
 import Level2 from './components/Level2';
@@ -43,6 +43,17 @@ function App() {
     localStorage.setItem('gameState', JSON.stringify(gameState));
   }, [gameState]);
 
+  const resetGame = () => {
+    localStorage.removeItem('gameState'); // Очищаем localStorage
+    setGameState({
+      isInitialCompleted: false,
+      level1Completed: false,
+      level2Completed: false,
+      level3Completed: false,
+      drawerOpen: false,
+    }); // Сбрасываем состояние игры
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -78,7 +89,9 @@ function App() {
               {gameState.level2Completed && (
                 <Level3
                   isActive={!gameState.level3Completed}
-                  onComplete={() => setGameState(prev => ({...prev, level3Completed: true}))}
+                  onComplete={() => {
+                    setGameState(prev => ({...prev, level3Completed: true}));
+                  }}
                 />
               )}
               {gameState.level3Completed && (
@@ -91,11 +104,15 @@ function App() {
                     zIndex: 1000, 
                     textAlign: 'center' 
                   }}
-              >
-                <Typography variant="h4" color="primary">
-                  МЭНЧИК ТЫ КРАСАВА!!!<br /><br />ТЫ ВСЕ ПРОШЕЛ!!!
-                </Typography>
-              </Box>
+                >
+                  <Typography variant="h4" color="primary">
+                    МЭНЧИК ТЫ КРАСАВА!!!
+                  </Typography>
+                  <Typography variant="h4" color="primary">ТЫ ВСЕ ПРОШЕЛ!!!</Typography>
+                  <Button variant="contained" onClick={resetGame} sx={{ mt: 2 }}>
+                    Пройти заново
+                  </Button>
+                </Box>
               )}
             </>
           )}
