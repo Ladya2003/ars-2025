@@ -22,33 +22,33 @@ export const questions = {
     },
     {
       question: "Арсений, что круче, 3 или 4? (одно слово)",
-      answer: "три"
+      answer: "четыре"
     }
   ],
   level2: [
     {
       question: "Что за песня? Отгадай просто название (на английском, одно слово)",
-      audio: "/assets/songs/song1.mov",
+      audio: `${process.env.PUBLIC_URL}/assets/songs/song1.mov`,
       answer: "fein"
     },
     {
       question: "Отгадай название песни (на русском, одно слово)",
-      audio: "/assets/songs/song2.mov",
+      audio: `${process.env.PUBLIC_URL}/assets/songs/song2.mov`,
       answer: "пососи"
     },
     {
       question: "Отгадай название песни (на английском, два слова)",
-      audio: "/assets/songs/song3.mov",
+      audio: `${process.env.PUBLIC_URL}/assets/songs/song3.mov`,
       answer: "benz truck"
     },
     {
       question: "Отгадай название песни (на русском, два слова. Подсказка, сначала идет глагол)",
-      audio: "/assets/songs/song4.mov",
+      audio: `${process.env.PUBLIC_URL}/assets/songs/song4.mov`,
       answer: "ебашь альбина"
     },
     {
       question: "Отгадай название песни (на русском, два слова)",
-      audio: "/assets/songs/song5.mov",
+      audio: `${process.env.PUBLIC_URL}/assets/songs/song5.mov`,
       answer: "город сочи"
     }
   ]

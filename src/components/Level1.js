@@ -81,7 +81,7 @@ function Level1({ isActive, onComplete }) {
               </Typography>
               <Box
                 component="img"
-                src="/assets/rewards/watch-reward.jpg"
+                src={`${process.env.PUBLIC_URL}/assets/rewards/watch-reward.jpg`}
                 sx={{
                   maxWidth: '100%',
                   height: 'auto',

@@ -26,7 +26,7 @@ function RewardsDrawer({ gameState, open, onClose }) {
       content: (
         <Box
           component="img"
-          src="/assets/rewards/watch-reward.jpg"
+          src={`${process.env.PUBLIC_URL}/assets/rewards/watch-reward.jpg`}
           sx={{
             width: '100%',
             borderRadius: 1,
@@ -43,7 +43,7 @@ function RewardsDrawer({ gameState, open, onClose }) {
       content: (
         <audio
           controls
-          src="/assets/rewards/reward-song.mp3"
+          src={`${process.env.PUBLIC_URL}/assets/rewards/reward-song.mp3`}
           style={{ width: '100%', marginTop: '16px', minWidth: '300px' }}
         />
       ),
@@ -54,10 +54,16 @@ function RewardsDrawer({ gameState, open, onClose }) {
       icon: <Videocam />,
       content: (
         <Box
-          component="video"
-          controls
-          sx={{ width: '100%', borderRadius: 1, mt: 2 }}
-          src="/assets/rewards/final-reward.mp4"
+          component="iframe"
+          width="100%"
+          height="315"
+          src="https://www.youtube.com/embed/CKIUa8rKBj8?si=oEfz34LmastM_Xp3"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+          sx={{ borderRadius: 1, mt: 2 }}
         />
       ),
       unlocked: gameState.level3Completed

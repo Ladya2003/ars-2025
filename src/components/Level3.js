@@ -24,8 +24,8 @@ const BRICK_COLS = 5;
 const MIN_SCORE = 10;
 
 // Уменьшите значения dx и dy для уменьшения скорости
-const INITIAL_BALL_DX = 1; // Уменьшенная скорость по оси X
-const INITIAL_BALL_DY = -1; // Уменьшенная скорость по оси Y
+const INITIAL_BALL_DX = 2; // Увеличенная скорость по оси X
+const INITIAL_BALL_DY = -2; // Увеличенная скорость по оси Y
 
 function Level3({ isActive, onComplete }) {
   const canvasRef = useRef(null);
@@ -33,8 +33,8 @@ function Level3({ isActive, onComplete }) {
   const [score, setScore] = useState(0);
   const [showDialog, setShowDialog] = useState(false);
   const [showReward, setShowReward] = useState(false);
-  const [playHitSound] = useSound('/assets/level3/hit.mp3', { volume: 0.5 });
-  const [playHitPaddleSound] = useSound('/assets/level3/hit-paddle.mp3', { volume: 0.5 });
+  const [playHitSound] = useSound(`${process.env.PUBLIC_URL}/assets/level3/hit.mp3`, { volume: 0.5 });
+  const [playHitPaddleSound] = useSound(`${process.env.PUBLIC_URL}/assets/level3/hit-paddle.mp3`, { volume: 0.5 });
 
   const isCompleted = score >= MIN_SCORE;
 
